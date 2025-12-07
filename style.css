@@ -46,7 +46,7 @@ h2 {
     display: flex;
     justify-content: space-around;
     gap: 15px; 
-    position: static; 
+    position: relative; 
 }
 
 /* Estilo dos Botões */
