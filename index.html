@@ -1,46 +1,135 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>esse e meu site</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Pergunta!</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+            overflow: hidden; /* Garante que o botão móvel não cause barras de rolagem */
+        }
+
+        #pergunta-container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative; 
+            z-index: 10; /* Z-index: Fica na frente do body, mas atrás do botão Não */
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .botoes-sim {
+            /* Container para o botão 'Sim' para manter o alinhamento central */
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        #btnSim {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            /* Garante que o 'Sim' esteja visível e com espaço */
+            margin: 0 40px 0 0; 
+        }
+
+        #btnSim:hover {
+            background-color: #45a049;
+        }
+
+        #btnNao {
+            position: absolute; /* Permite o movimento livre */
+            background-color: #f44336; /* Vermelho */
+            color: white;
+            /* Z-index 99: **MUITO ALTO** para garantir que o botão "Não" fique na frente de tudo. */
+            z-index: 99;
+            
+            /* Posicionamento inicial: centraliza e move para a direita para separar do botão "Sim" */
+            top: 50%;
+            left: 50%; 
+            transform: translate(50px, 0); 
+            transition: 0.1s; /* Suaviza a transição de movimento */
+        }
+    </style>
 </head>
 <body>
-    <div class="quiz-box">
-        <img src="sua-imagem-aqui.png" alt="Dois ursinhos se olhando" class="quiz-image"> 
 
-        <h2>Do you is gay?</h2>
-        
-        <div class="buttons-container">
-            <button id="yesBtn" onclick="alert('Eu sabia hehe 🙂')">Yes</button>
-
-            <button id="noBtn">No</button>
+    <div id="pergunta-container">
+        <h1>Você é gay?</h1>
+        <div class="botoes-sim">
+            <button id="btnSim" onclick="clicouSim()">Sim</button>
         </div>
     </div>
     
+    <button id="btnNao">Não</button>
+
     <script>
-        const noButton = document.getElementById('noBtn');
+        const btnNao = document.getElementById('btnNao');
+        const termoPesquisa = encodeURIComponent('fotos de gay');
+        const urlGoogle = `https://www.google.com/search?q=${termoPesquisa}`;
 
-        // Função para mover o botão "Não" quando o mouse passar por cima
-        noButton.addEventListener('mouseover', function() {
-            // Garante que o botão use posicionamento absoluto para se mover
-            noButton.style.position = 'absolute';
+        // Adiciona os eventos para o botão se mover ao passar o mouse ou tocar
+        btnNao.addEventListener('mouseover', moverBotao);
+        btnNao.addEventListener('touchstart', moverBotao);
 
-            // Calcula novas posições aleatórias
-            const newX = Math.random() * (window.innerWidth - noButton.offsetWidth - 50);
-            const newY = Math.random() * (window.innerHeight - noButton.offsetHeight - 50);
-            
+        function moverBotao() {
+            // Obtém as dimensões da janela visível
+            const maxX = window.innerWidth - btnNao.clientWidth;
+            const maxY = window.innerHeight - btnNao.clientHeight;
+
+            // Gera posições aleatórias, mantendo o botão longe das bordas (50px de margem)
+            const randomX = Math.floor(Math.random() * (maxX - 100)) + 50; 
+            const randomY = Math.floor(Math.random() * (maxY - 100)) + 50;
+
             // Aplica as novas posições
-            noButton.style.left = newX + 'px';
-            noButton.style.top = newY + 'px';
+            btnNao.style.left = `${randomX}px`;
+            btnNao.style.top = `${randomY}px`;
+        }
+
+        function clicouSim() {
+            // 1. Faz o botão "Não" desaparecer (confirmado)
+            btnNao.style.display = 'none';
+            
+            // 2. Exibe a mensagem "Eu sei!"
+            alert('Eu sei!');
+
+            // 3. Abre uma nova aba com a pesquisa do Google
+            window.open(urlGoogle, '_blank');
+            
+            // Opcional: Remove os listeners de movimento do botão "Não"
+            btnNao.removeEventListener('mouseover', moverBotao);
+            btnNao.removeEventListener('touchstart', moverBotao);
+        }
+        
+        // Se o usuário conseguir clicar em "Não", ele apenas se move novamente
+        btnNao.addEventListener('click', (event) => {
+            event.preventDefault(); 
+            moverBotao(); 
         });
 
-        // Função que é executada se a pessoa conseguir clicar no botão
-        noButton.addEventListener('click', function() {
-            // Redireciona para o link desejado
-           // window.location.href = 'https://www.google.com/search?q=surpresa+romantica'; // Mude este link para onde você quiser!
-        });
     </script>
+
 </body>
 </html>
